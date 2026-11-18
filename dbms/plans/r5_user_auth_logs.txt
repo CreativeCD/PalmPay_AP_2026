@@ -1,0 +1,30 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R5
+-- Query: Retrieve user authentication audit logs with user details (LEFT JOIN)
+-- Section: 3. Security & Biometric Audit Logging
+-- Controller: biometricController.getLogs
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 1
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Nested Loop Left Join  (cost=0.57..16.71 rows=3 width=110) (actual time=0.058..0.064 rows=3 loops=1)
+  Output: al.auth_log_id, al.user_id, COALESCE(u.name, 'Unauthenticated / Anonymous'::character varying), u.email, al.method, al.result, al.score, al.created_at
+  Buffers: shared hit=8
+  ->  Index Scan using idx_auth_logs_user_created on public.auth_logs al  (cost=0.28..8.39 rows=3 width=60) (actual time=0.032..0.036 rows=3 loops=1)
+        Output: al.auth_log_id, al.user_id, al.method, al.result, al.score, al.created_at
+        Index Cond: (al.user_id = 1)
+        Buffers: shared hit=4
+  ->  Index Scan using users_pkey on public.users u  (cost=0.29..2.77 rows=1 width=58) (actual time=0.006..0.007 rows=1 loops=3)
+        Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+        Index Cond: (u.user_id = 1)
+        Buffers: shared hit=4
+Planning Time: 0.198 ms
+Execution Time: 0.092 ms
+
+-- Plan Details:
+-- 1. Index Used: idx_auth_logs_user_created (Composite Index on (user_id, created_at DESC))
+-- 2. Optimization: The composite index simultaneously filters by user_id AND supplies rows pre-sorted by created_at DESC, avoiding an in-memory Sort node
+-- 3. Outer/Inner: auth_logs is outer relation; users is inner relation joined via users_pkey
+-- 4. Left Join Handling: If user_id is NULL or user removed, left join ensures audit record is preserved with fallback display name
+-- 5. Cache Performance: 100% buffer hit (8 shared buffer pages accessed)

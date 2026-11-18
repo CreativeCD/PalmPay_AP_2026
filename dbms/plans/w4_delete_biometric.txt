@@ -1,0 +1,24 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query W4
+-- Query: Reset / Delete existing biometric template enrollment
+-- Section: 2. Biometric Template Enrollment & Verification
+-- Controller: biometricController.deleteTemplate
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 1
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Delete on public.biometric_templates  (cost=0.28..8.32 rows=2 width=6) (actual time=0.085..0.087 rows=1 loops=1)
+  Buffers: shared hit=9 dirtied=2
+  ->  Index Scan using idx_biometric_templates_user_id on public.biometric_templates  (cost=0.28..8.32 rows=2 width=6) (actual time=0.022..0.024 rows=1 loops=1)
+        Output: ctid
+        Index Cond: (biometric_templates.user_id = 1)
+        Buffers: shared hit=3
+Planning Time: 0.071 ms
+Execution Time: 0.118 ms
+
+-- Plan Details:
+-- 1. Scan Method: Index Scan using idx_biometric_templates_user_id to locate target tuple ctid pointers
+-- 2. Performance Advantage: Avoids full table sequential scan over 12,500 biometric records
+-- 3. Maintenance: Removes index pointers across primary key and idx_biometric_templates_created_at
+-- 4. Buffer Activity: 9 shared buffer hits, 2 dirtied pages registered in WAL

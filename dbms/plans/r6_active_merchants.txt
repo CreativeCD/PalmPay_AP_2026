@@ -1,0 +1,27 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R6
+-- Query: List all active merchants for payment checkout
+-- Section: 4. Merchant Catalog & Validation
+-- Controller: merchantsController.getMerchants
+-- Engine: PostgreSQL 16
+-- Test Parameters: None
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Sort  (cost=1.28..1.31 rows=12 width=56) (actual time=0.041..0.043 rows=12 loops=1)
+  Output: merchant_id, name, category
+  Sort Key: merchants.name
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=2
+  ->  Seq Scan on public.merchants  (cost=0.00..1.15 rows=12 width=56) (actual time=0.014..0.019 rows=12 loops=1)
+        Output: merchant_id, name, category
+        Filter: (merchants.active = true)
+        Buffers: shared hit=2
+Planning Time: 0.089 ms
+Execution Time: 0.062 ms
+
+-- Plan Details:
+-- 1. Scan Method: Sequential Scan on public.merchants (table size is small reference data: 50 rows, 2 pages)
+-- 2. Optimizer Rationale: For small lookup tables fitting in 1-2 pages, a sequential scan is faster than an index scan because it avoids secondary index page traversals
+-- 3. Sort: In-memory quicksort on name ascending (25kB memory consumed, well within 64MB work_mem)
+-- 4. Latency: Sub-millisecond execution (0.062 ms)

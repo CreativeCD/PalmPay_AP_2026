@@ -1,0 +1,27 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query W3
+-- Query: Enroll or update user biometric template
+-- Section: 2. Biometric Template Enrollment & Verification
+-- Controller: biometricController.enroll
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 1, $2 = 'vault://templates/usr_1/palm_left_nir_v1.enc', $3 = 'NIR_SENSOR_V1'
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Insert on public.biometric_templates  (cost=0.00..0.01 rows=1 width=88) (actual time=0.158..0.160 rows=1 loops=1)
+  Output: template_id, user_id, method, created_at
+  Buffers: shared hit=8 dirtied=2
+  ->  Result  (cost=0.00..0.01 rows=1 width=88) (actual time=0.003..0.004 rows=1 loops=1)
+        Output: nextval('biometric_templates_template_id_seq'::regclass), 1::bigint, 'vault://templates/usr_1/palm_left_nir_v1.enc'::text, 'NIR_SENSOR_V1'::character varying(50), CURRENT_TIMESTAMP
+Planning Time: 0.046 ms
+Execution Time: 0.198 ms
+
+-- Plan Details:
+-- 1. Operation: Single-row INSERT with RETURNING clause
+-- 2. Constraints Enforced:
+--    - fk_biometric_templates_user: Foreign key lookup verifying valid user in users(user_id)
+--    - NOT NULL constraints on template_reference and method
+-- 3. Secondary Indexes Maintained:
+--    - idx_biometric_templates_user_id
+--    - idx_biometric_templates_created_at
+-- 4. Buffer Activity: 8 buffer hits (heap data page + primary key + 2 secondary B-tree indexes)

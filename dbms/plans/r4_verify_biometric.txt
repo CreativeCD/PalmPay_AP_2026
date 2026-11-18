@@ -1,0 +1,32 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R4
+-- Query: Retrieve latest biometric template with user verification (JOIN)
+-- Section: 2. Biometric Template Enrollment & Verification
+-- Controller: biometricController.verify / paymentsController.createPayment
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 1
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Limit  (cost=0.57..8.62 rows=1 width=132) (actual time=0.049..0.051 rows=1 loops=1)
+  Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+  Buffers: shared hit=6
+  ->  Nested Loop  (cost=0.57..16.66 rows=2 width=132) (actual time=0.047..0.049 rows=1 loops=1)
+        Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+        Buffers: shared hit=6
+        ->  Index Scan using idx_biometric_templates_created_at on public.biometric_templates bt  (cost=0.28..8.33 rows=2 width=82) (actual time=0.026..0.027 rows=1 loops=1)
+              Output: bt.template_id, bt.user_id, bt.template_reference, bt.method, bt.created_at
+              Filter: (bt.user_id = 1)
+              Buffers: shared hit=3
+        ->  Index Scan using users_pkey on public.users u  (cost=0.29..4.16 rows=1 width=58) (actual time=0.017..0.018 rows=1 loops=1)
+              Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+              Index Cond: (u.user_id = 1)
+              Buffers: shared hit=3
+Planning Time: 0.208 ms
+Execution Time: 0.078 ms
+
+-- Plan Details:
+-- 1. Optimization: Pre-sorted index scan on created_at DESC satisfies the ORDER BY clause without a separate sort node
+-- 2. Join Strategy: Nested Loop joining the newest template tuple with the user's primary key record
+-- 3. Execution Early-Exit: LIMIT 1 stops iteration immediately after finding the top matching row
+-- 4. Cache Performance: 100% buffer hit (6 shared buffer pages accessed)

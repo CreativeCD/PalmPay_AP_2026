@@ -1,0 +1,29 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query W5
+-- Query: Insert authentication / biometric audit log record
+-- Section: 3. Security & Biometric Audit Logging
+-- Controller: biometricController.verify / paymentsController.createPayment
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 1, $2 = 'NIR_PALM_MATCH', $3 = 'passed', $4 = 0.9420
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Insert on public.auth_logs  (cost=0.00..0.01 rows=1 width=54) (actual time=0.149..0.151 rows=1 loops=1)
+  Output: auth_log_id, user_id, method, result, score, created_at
+  Buffers: shared hit=7 dirtied=2
+  ->  Result  (cost=0.00..0.01 rows=1 width=54) (actual time=0.002..0.003 rows=1 loops=1)
+        Output: nextval('auth_logs_auth_log_id_seq'::regclass), 1::bigint, 'NIR_PALM_MATCH'::character varying(50), 'passed'::character varying(20), 0.9420::numeric(6,4), CURRENT_TIMESTAMP
+Planning Time: 0.044 ms
+Execution Time: 0.188 ms
+
+-- Plan Details:
+-- 1. Operation: Single-row INSERT with RETURNING clause
+-- 2. Constraints Checked:
+--    - fk_auth_logs_user: Verifies user_id references valid users(user_id) (or NULL)
+--    - chk_auth_logs_score_range: Evaluates score BETWEEN 0.0000 AND 1.0000
+-- 3. Indexes Maintained:
+--    - auth_logs_pkey
+--    - idx_auth_logs_user_id
+--    - idx_auth_logs_created_at
+--    - idx_auth_logs_user_created
+-- 4. Buffer Activity: 7 buffer hits, 2 dirtied pages written to WAL
