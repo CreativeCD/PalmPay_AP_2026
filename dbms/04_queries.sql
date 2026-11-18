@@ -162,3 +162,157 @@ SELECT al.auth_log_id,
  ORDER BY al.created_at DESC;
 
 
+-- ============================================================================
+-- SECTION 4: MERCHANT CATALOG & VALIDATION
+-- Handles retrieval and status validation of registered merchant endpoints.
+-- ============================================================================
+
+-- Query R6: List all active merchants for payment checkout
+-- Controller: merchantsController.getMerchants
+-- Purpose: Provides merchant directory for user payment destination selection in checkout UI.
+-- Tables: merchants
+-- Parameters: None
+-- READ
+SELECT merchant_id,
+       name,
+       category
+  FROM merchants
+ WHERE active = TRUE
+ ORDER BY name ASC;
+
+
+-- Query R7: Validate merchant status for payment processing
+-- Controller: paymentsController.createPayment
+-- Purpose: Ensures the destination merchant exists and is currently active before charging payment.
+-- Tables: merchants
+-- Parameters: $1 = merchant_id
+-- READ
+SELECT merchant_id,
+       name,
+       category,
+       active
+  FROM merchants
+ WHERE merchant_id = $1
+   AND active = TRUE;
+
+
+-- ============================================================================
+-- SECTION 5: WALLET TRANSACTIONS & CONCURRENCY CONTROL
+-- Manages atomic debits, balance verification, and row-level locking.
+-- ============================================================================
+
+-- Query R8: Fetch current wallet balance
+-- Controller: walletController.getWallet
+-- Purpose: Retrieves current available balance and last updated timestamp for display.
+-- Tables: wallets
+-- Parameters: $1 = user_id
+-- READ
+SELECT wallet_id,
+       user_id,
+       balance,
+       updated_at
+  FROM wallets
+ WHERE user_id = $1;
+
+
+-- Query R9: Lock wallet row for atomic payment deduction (Concurrency Control)
+-- Service: paymentService.processPayment
+-- Purpose: Acquires an exclusive row-level lock (FOR UPDATE) to prevent race conditions / double-spending.
+-- Tables: wallets
+-- Parameters: $1 = user_id
+-- READ
+SELECT wallet_id,
+       user_id,
+       balance
+  FROM wallets
+ WHERE user_id = $1
+   FOR UPDATE;
+
+
+-- Query W6: Debit wallet balance following successful biometric authorization
+-- Service: paymentService.processPayment
+-- Purpose: Deducts transaction amount from wallet balance with non-negative balance guard.
+-- Tables: wallets
+-- Parameters: $1 = deduction amount, $2 = user_id
+-- WRITE
+UPDATE wallets
+   SET balance    = balance - $1,
+       updated_at = CURRENT_TIMESTAMP
+ WHERE user_id = $2
+   AND balance >= $1
+ RETURNING wallet_id, user_id, balance, updated_at;
+
+
+-- ============================================================================
+-- SECTION 6: PAYMENT TRANSACTIONS & LEDGER
+-- Records immutable financial ledger entries and provides transaction histories.
+-- ============================================================================
+
+-- Query W7: Record completed payment transaction in ledger
+-- Service: paymentService.processPayment
+-- Purpose: Appends confirmed simulated payment into audit ledger linking user and merchant.
+-- Tables: transactions
+-- Parameters: $1 = user_id, $2 = merchant_id, $3 = amount, $4 = reference
+-- WRITE
+INSERT INTO transactions (user_id, merchant_id, amount, status, reference)
+VALUES ($1, $2, $3, 'completed', $4)
+RETURNING transaction_id, user_id, merchant_id, amount, status, reference, created_at;
+
+
+-- Query R10: Check transaction reference uniqueness (Idempotency Guard)
+-- Controller: paymentsController.createPayment
+-- Purpose: Verifies whether an idempotency key was previously processed to avoid duplicate debits.
+-- Tables: transactions
+-- Parameters: $1 = reference string
+-- READ
+SELECT transaction_id,
+       status,
+       amount,
+       created_at
+  FROM transactions
+ WHERE reference = $1;
+
+
+-- Query R11: Retrieve user transaction history with merchant details (JOIN)
+-- Controller: transactionsController.getTransactions
+-- Purpose: Displays user transaction statement with enriched merchant names and business categories.
+-- Tables: transactions (t), merchants (m)
+-- Parameters: $1 = user_id
+-- READ
+SELECT t.transaction_id,
+       t.amount,
+       t.status,
+       t.reference,
+       t.created_at,
+       m.merchant_id,
+       m.name AS merchant_name,
+       m.category AS merchant_category
+  FROM transactions t
+  JOIN merchants m ON t.merchant_id = m.merchant_id
+ WHERE t.user_id = $1
+ ORDER BY t.created_at DESC;
+
+
+-- Query R12: Comprehensive transaction receipt lookup (MULTI-TABLE JOIN)
+-- Controller: paymentsController.createPayment / Receipt View
+-- Purpose: Fetches complete payment voucher joining transaction ledger, paying customer, and merchant.
+-- Tables: transactions (t), users (u), merchants (m)
+-- Parameters: $1 = transaction_id
+-- READ
+SELECT t.transaction_id,
+       t.reference,
+       t.amount,
+       t.status,
+       t.created_at,
+       u.user_id,
+       u.name AS customer_name,
+       u.email AS customer_email,
+       m.merchant_id,
+       m.name AS merchant_name,
+       m.category AS merchant_category
+  FROM transactions t
+  JOIN users u ON t.user_id = u.user_id
+  JOIN merchants m ON t.merchant_id = m.merchant_id
+ WHERE t.transaction_id = $1;
+
+
