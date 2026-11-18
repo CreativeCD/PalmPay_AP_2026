@@ -1,0 +1,25 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query W2
+-- Query: Initialize simulated demo wallet upon registration
+-- Section: 1. User Registration & Authentication
+-- Controller: authController.register
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 1 (user_id)
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Insert on public.wallets  (cost=0.00..0.01 rows=1 width=56) (actual time=0.138..0.140 rows=1 loops=1)
+  Output: wallet_id, user_id, balance, updated_at
+  Buffers: shared hit=5 dirtied=1
+  ->  Result  (cost=0.00..0.01 rows=1 width=56) (actual time=0.002..0.003 rows=1 loops=1)
+        Output: nextval('wallets_wallet_id_seq'::regclass), 1::bigint, 1000.00::numeric(12,2), CURRENT_TIMESTAMP
+Planning Time: 0.042 ms
+Execution Time: 0.174 ms
+
+-- Plan Details:
+-- 1. Operation: Single-row INSERT with RETURNING clause
+-- 2. Constraints Enforced:
+--    - fk_wallets_user: Validates foreign key relationship referencing users(user_id)
+--    - uq_wallets_user_id: Enforces strict 1:1 user-to-wallet cardinality
+--    - chk_wallets_non_negative_balance: Evaluates 1000.00 >= 0.00
+-- 3. Buffer Activity: 5 buffer hits (wallets data page, wallets_pkey, uq_wallets_user_id, users foreign key lookup)

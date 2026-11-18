@@ -1,0 +1,22 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R1
+-- Query: Check if an email address is already registered
+-- Section: 1. User Registration & Authentication
+-- Controller: authController.register
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 'asha@example.com'
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Index Scan using uq_users_email_ci on public.users  (cost=0.29..8.30 rows=1 width=32) (actual time=0.035..0.038 rows=1 loops=1)
+  Output: user_id, email
+  Index Cond: (lower((users.email)::text) = 'asha@example.com'::text)
+  Buffers: shared hit=3
+Planning Time: 0.112 ms
+Execution Time: 0.059 ms
+
+-- Plan Details:
+-- 1. Index Used: uq_users_email_ci (Expression Index on LOWER(email))
+-- 2. Scan Type: B-Tree Index Scan
+-- 3. Cache Performance: 100% buffer hit (3 pages fetched from shared memory)
+-- 4. Result Cardinality: Exactly 1 tuple returned

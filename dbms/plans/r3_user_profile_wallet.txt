@@ -1,0 +1,30 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R3
+-- Query: Get authenticated user profile with wallet summary (JOIN)
+-- Section: 1. User Registration & Authentication
+-- Controller: authController.getMe / Dashboard Profile View
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 1 (user_id)
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Nested Loop  (cost=0.57..16.63 rows=1 width=98) (actual time=0.043..0.046 rows=1 loops=1)
+  Output: u.user_id, u.name, u.email, u.created_at, w.wallet_id, w.balance, w.updated_at
+  Buffers: shared hit=6
+  ->  Index Scan using users_pkey on public.users u  (cost=0.29..8.30 rows=1 width=58) (actual time=0.020..0.021 rows=1 loops=1)
+        Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+        Index Cond: (u.user_id = 1)
+        Buffers: shared hit=3
+  ->  Index Scan using uq_wallets_user_id on public.wallets w  (cost=0.28..8.30 rows=1 width=48) (actual time=0.019..0.021 rows=1 loops=1)
+        Output: w.wallet_id, w.user_id, w.balance, w.updated_at
+        Index Cond: (w.user_id = 1)
+        Buffers: shared hit=3
+Planning Time: 0.165 ms
+Execution Time: 0.072 ms
+
+-- Plan Details:
+-- 1. Join Algorithm: Nested Loop using indexed lookups on both inner and outer relations
+-- 2. Outer Table: public.users via Primary Key B-Tree Index (users_pkey)
+-- 3. Inner Table: public.wallets via Unique Index on user_id (uq_wallets_user_id)
+-- 4. Complexity: O(log N + log M) point lookups, avoiding any sequential scan
+-- 5. Cache Performance: 100% buffer hit (6 shared buffer pages accessed)

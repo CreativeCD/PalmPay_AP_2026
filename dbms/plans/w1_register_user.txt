@@ -1,0 +1,23 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query W1
+-- Query: Register a new user account
+-- Section: 1. User Registration & Authentication
+-- Controller: authController.register
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 'Asha Sharma', $2 = 'asha@example.com', $3 = '$2b$12$e8rG6xLwM1nB9qZvTkOpXuJ...'
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Insert on public.users  (cost=0.00..0.01 rows=1 width=560) (actual time=0.178..0.180 rows=1 loops=1)
+  Output: user_id, name, email, created_at
+  Buffers: shared hit=7 dirtied=2
+  ->  Result  (cost=0.00..0.01 rows=1 width=560) (actual time=0.003..0.004 rows=1 loops=1)
+        Output: nextval('users_user_id_seq'::regclass), 'Asha Sharma'::character varying(100), lower('asha@example.com'::character varying(255)), '$2b$12$e8rG6xLwM1nB9qZvTkOpXuJ...'::character varying(255), CURRENT_TIMESTAMP
+Planning Time: 0.048 ms
+Execution Time: 0.215 ms
+
+-- Plan Details:
+-- 1. Operation: Single-row INSERT with RETURNING clause
+-- 2. Sequence Generator: nextval() invoked for BIGINT IDENTITY user_id
+-- 3. Constraint Enforcement: Checked NOT NULL constraints and unique functional index uq_users_email_ci
+-- 4. Buffer Activity: 7 buffer hits (data block + 2 indexes: users_pkey, uq_users_email_ci), 2 dirtied pages written to WAL

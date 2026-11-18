@@ -1,0 +1,22 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R2
+-- Query: Authenticate user login credentials
+-- Section: 1. User Registration & Authentication
+-- Controller: authController.login
+-- Engine: PostgreSQL 16
+-- Test Parameters: $1 = 'asha@example.com'
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Index Scan using uq_users_email_ci on public.users  (cost=0.29..8.30 rows=1 width=115) (actual time=0.028..0.030 rows=1 loops=1)
+  Output: user_id, name, email, password_hash
+  Index Cond: (lower((users.email)::text) = 'asha@example.com'::text)
+  Buffers: shared hit=3
+Planning Time: 0.082 ms
+Execution Time: 0.046 ms
+
+-- Plan Details:
+-- 1. Index Used: uq_users_email_ci (Expression Index on LOWER(email))
+-- 2. Scan Type: B-Tree Index Scan
+-- 3. Cache Performance: 100% buffer hit (3 pages in shared buffer pool)
+-- 4. Result Cardinality: Exactly 1 tuple returned containing password_hash for bcrypt validation
