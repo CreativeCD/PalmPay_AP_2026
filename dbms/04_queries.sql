@@ -316,3 +316,59 @@ SELECT t.transaction_id,
  WHERE t.transaction_id = $1;
 
 
+-- ============================================================================
+-- SECTION 7: AGGREGATE QUERIES & FINANCIAL ANALYTICS
+-- Computes spending breakdowns, transaction volumes, and merchant performance.
+-- ============================================================================
+
+-- Query R13: User expenditure summary aggregated by merchant category (AGGREGATE + JOIN)
+-- Controller: Analytics / Dashboard Expenditure Chart
+-- Purpose: Aggregates customer expenditure by category, computing totals, count, and average spend.
+-- Tables: transactions (t), merchants (m)
+-- Parameters: $1 = user_id
+-- READ
+SELECT m.category,
+       COUNT(t.transaction_id) AS total_transactions,
+       SUM(t.amount) AS total_spent,
+       ROUND(AVG(t.amount), 2) AS avg_transaction_amount
+  FROM transactions t
+  JOIN merchants m ON t.merchant_id = m.merchant_id
+ WHERE t.user_id = $1
+   AND t.status = 'completed'
+ GROUP BY m.category
+ ORDER BY total_spent DESC;
+
+
+-- Query R14: Merchant total revenue and transaction volume summary (AGGREGATE + JOIN)
+-- Controller: Merchant Portal / Admin Settlement Analytics
+-- Purpose: Computes total business volume and revenue per merchant using LEFT JOIN for all merchants.
+-- Tables: merchants (m), transactions (t)
+-- Parameters: None
+-- READ
+SELECT m.merchant_id,
+       m.name AS merchant_name,
+       m.category,
+       COUNT(t.transaction_id) AS total_sales_count,
+       COALESCE(SUM(t.amount), 0.00) AS total_revenue
+  FROM merchants m
+  LEFT JOIN transactions t ON m.merchant_id = t.merchant_id
+                          AND t.status = 'completed'
+ WHERE m.active = TRUE
+ GROUP BY m.merchant_id, m.name, m.category
+ ORDER BY total_revenue DESC;
+
+
+-- Query R15: User monthly spending summary (AGGREGATE)
+-- Controller: Monthly Statement / Budgeting Analytics
+-- Purpose: Computes monthly total spend and count of transactions for personal finance tracking.
+-- Tables: transactions
+-- Parameters: $1 = user_id
+-- READ
+SELECT DATE_TRUNC('month', created_at) AS transaction_month,
+       COUNT(transaction_id) AS monthly_transaction_count,
+       SUM(amount) AS monthly_total_spent
+  FROM transactions
+ WHERE user_id = $1
+   AND status = 'completed'
+ GROUP BY DATE_TRUNC('month', created_at)
+ ORDER BY transaction_month DESC;
