@@ -1,0 +1,38 @@
+=== W05 run 1 ===
+Insert on public.auth_logs  (cost=0.00..0.01 rows=1 width=214) (actual time=0.203..0.204 rows=1.00 loops=1)
+  Output: auth_logs.auth_log_id, auth_logs.user_id, auth_logs.method, auth_logs.result, auth_logs.score, auth_logs.created_at
+  Buffers: shared hit=106
+  ->  Result  (cost=0.00..0.01 rows=1 width=214) (actual time=0.019..0.020 rows=1.00 loops=1)
+        Output: nextval('auth_logs_auth_log_id_seq'), '1'::bigint, 'NIR_PALM_MATCH'::character varying(50), 'passed'::character varying(20), 0.8950::numeric(6,4), CURRENT_TIMESTAMP
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.034 ms
+Trigger RI_ConstraintTrigger_c_17019 for constraint fk_auth_logs_user: time=0.203 calls=1
+Execution Time: 0.421 ms
+
+=== W05 run 2 ===
+Insert on public.auth_logs  (cost=0.00..0.01 rows=1 width=214) (actual time=0.192..0.193 rows=1.00 loops=1)
+  Output: auth_logs.auth_log_id, auth_logs.user_id, auth_logs.method, auth_logs.result, auth_logs.score, auth_logs.created_at
+  Buffers: shared hit=107 dirtied=1 written=1
+  ->  Result  (cost=0.00..0.01 rows=1 width=214) (actual time=0.013..0.013 rows=1.00 loops=1)
+        Output: nextval('auth_logs_auth_log_id_seq'), '1'::bigint, 'NIR_PALM_MATCH'::character varying(50), 'passed'::character varying(20), 0.8950::numeric(6,4), CURRENT_TIMESTAMP
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.033 ms
+Trigger RI_ConstraintTrigger_c_17019 for constraint fk_auth_logs_user: time=0.201 calls=1
+Execution Time: 0.404 ms
+
+=== W05 run 3 ===
+Insert on public.auth_logs  (cost=0.00..0.01 rows=1 width=214) (actual time=0.121..0.121 rows=1.00 loops=1)
+  Output: auth_logs.auth_log_id, auth_logs.user_id, auth_logs.method, auth_logs.result, auth_logs.score, auth_logs.created_at
+  Buffers: shared hit=105
+  ->  Result  (cost=0.00..0.01 rows=1 width=214) (actual time=0.014..0.014 rows=1.00 loops=1)
+        Output: nextval('auth_logs_auth_log_id_seq'), '1'::bigint, 'NIR_PALM_MATCH'::character varying(50), 'passed'::character varying(20), 0.8950::numeric(6,4), CURRENT_TIMESTAMP
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.034 ms
+Trigger RI_ConstraintTrigger_c_17019 for constraint fk_auth_logs_user: time=0.200 calls=1
+Execution Time: 0.332 ms

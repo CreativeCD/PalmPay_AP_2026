@@ -1,0 +1,32 @@
+=== R01 run 1 ===
+Index Scan using uq_users_email_ci on public.users  (cost=0.28..8.30 rows=1 width=36) (actual time=0.008..0.008 rows=1.00 loops=1)
+  Output: user_id, email
+  Index Cond: (lower((users.email)::text) = 'alice@example.com'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=93 dirtied=4
+Planning Time: 0.402 ms
+Execution Time: 0.021 ms
+
+=== R01 run 2 ===
+Index Scan using uq_users_email_ci on public.users  (cost=0.28..8.30 rows=1 width=36) (actual time=0.008..0.008 rows=1.00 loops=1)
+  Output: user_id, email
+  Index Cond: (lower((users.email)::text) = 'alice@example.com'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=87
+Planning Time: 0.244 ms
+Execution Time: 0.020 ms
+
+=== R01 run 3 ===
+Index Scan using uq_users_email_ci on public.users  (cost=0.28..8.30 rows=1 width=36) (actual time=0.008..0.008 rows=1.00 loops=1)
+  Output: user_id, email
+  Index Cond: (lower((users.email)::text) = 'alice@example.com'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=87
+Planning Time: 0.271 ms
+Execution Time: 0.021 ms

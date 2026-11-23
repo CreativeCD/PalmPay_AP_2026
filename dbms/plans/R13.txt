@@ -1,0 +1,116 @@
+=== R13 run 1 ===
+Sort  (cost=357.59..357.61 rows=8 width=85) (actual time=0.558..0.558 rows=1.00 loops=1)
+  Output: m.category, (count(t.transaction_id)), (sum(t.amount)), (round(avg(t.amount), 2))
+  Sort Key: (sum(t.amount)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=315
+  ->  HashAggregate  (cost=357.33..357.47 rows=8 width=85) (actual time=0.550..0.550 rows=1.00 loops=1)
+        Output: m.category, count(t.transaction_id), sum(t.amount), round(avg(t.amount), 2)
+        Group Key: m.category
+        Batches: 1  Memory Usage: 32kB
+        Buffers: shared hit=312
+        ->  Hash Join  (cost=19.19..348.39 rows=1192 width=27) (actual time=0.046..0.488 rows=667.00 loops=1)
+              Output: m.category, t.transaction_id, t.amount
+              Inner Unique: true
+              Hash Cond: (t.merchant_id = m.merchant_id)
+              Buffers: shared hit=312
+              ->  Bitmap Heap Scan on public.transactions t  (cost=17.96..342.71 rows=1192 width=22) (actual time=0.038..0.434 rows=667.00 loops=1)
+                    Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+                    Recheck Cond: (t.user_id = 1)
+                    Filter: ((t.status)::text = 'completed'::text)
+                    Rows Removed by Filter: 583
+                    Heap Blocks: exact=306
+                    Buffers: shared hit=311
+                    ->  Bitmap Index Scan on idx_transactions_user_id  (cost=0.00..17.66 rows=1250 width=0) (actual time=0.022..0.022 rows=1253.00 loops=1)
+                          Index Cond: (t.user_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=5
+              ->  Hash  (cost=1.10..1.10 rows=10 width=21) (actual time=0.005..0.005 rows=10.00 loops=1)
+                    Output: m.category, m.merchant_id
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=21) (actual time=0.002..0.002 rows=10.00 loops=1)
+                          Output: m.category, m.merchant_id
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=338 read=2
+Planning Time: 0.827 ms
+Execution Time: 0.595 ms
+
+=== R13 run 2 ===
+Sort  (cost=357.59..357.61 rows=8 width=85) (actual time=0.487..0.487 rows=1.00 loops=1)
+  Output: m.category, (count(t.transaction_id)), (sum(t.amount)), (round(avg(t.amount), 2))
+  Sort Key: (sum(t.amount)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=315
+  ->  HashAggregate  (cost=357.33..357.47 rows=8 width=85) (actual time=0.479..0.480 rows=1.00 loops=1)
+        Output: m.category, count(t.transaction_id), sum(t.amount), round(avg(t.amount), 2)
+        Group Key: m.category
+        Batches: 1  Memory Usage: 32kB
+        Buffers: shared hit=312
+        ->  Hash Join  (cost=19.19..348.39 rows=1192 width=27) (actual time=0.044..0.424 rows=667.00 loops=1)
+              Output: m.category, t.transaction_id, t.amount
+              Inner Unique: true
+              Hash Cond: (t.merchant_id = m.merchant_id)
+              Buffers: shared hit=312
+              ->  Bitmap Heap Scan on public.transactions t  (cost=17.96..342.71 rows=1192 width=22) (actual time=0.036..0.376 rows=667.00 loops=1)
+                    Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+                    Recheck Cond: (t.user_id = 1)
+                    Filter: ((t.status)::text = 'completed'::text)
+                    Rows Removed by Filter: 583
+                    Heap Blocks: exact=306
+                    Buffers: shared hit=311
+                    ->  Bitmap Index Scan on idx_transactions_user_id  (cost=0.00..17.66 rows=1250 width=0) (actual time=0.022..0.022 rows=1253.00 loops=1)
+                          Index Cond: (t.user_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=5
+              ->  Hash  (cost=1.10..1.10 rows=10 width=21) (actual time=0.005..0.005 rows=10.00 loops=1)
+                    Output: m.category, m.merchant_id
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=21) (actual time=0.002..0.002 rows=10.00 loops=1)
+                          Output: m.category, m.merchant_id
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=340
+Planning Time: 0.424 ms
+Execution Time: 0.520 ms
+
+=== R13 run 3 ===
+Sort  (cost=357.59..357.61 rows=8 width=85) (actual time=0.498..0.498 rows=1.00 loops=1)
+  Output: m.category, (count(t.transaction_id)), (sum(t.amount)), (round(avg(t.amount), 2))
+  Sort Key: (sum(t.amount)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=315
+  ->  HashAggregate  (cost=357.33..357.47 rows=8 width=85) (actual time=0.491..0.491 rows=1.00 loops=1)
+        Output: m.category, count(t.transaction_id), sum(t.amount), round(avg(t.amount), 2)
+        Group Key: m.category
+        Batches: 1  Memory Usage: 32kB
+        Buffers: shared hit=312
+        ->  Hash Join  (cost=19.19..348.39 rows=1192 width=27) (actual time=0.055..0.438 rows=667.00 loops=1)
+              Output: m.category, t.transaction_id, t.amount
+              Inner Unique: true
+              Hash Cond: (t.merchant_id = m.merchant_id)
+              Buffers: shared hit=312
+              ->  Bitmap Heap Scan on public.transactions t  (cost=17.96..342.71 rows=1192 width=22) (actual time=0.046..0.389 rows=667.00 loops=1)
+                    Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+                    Recheck Cond: (t.user_id = 1)
+                    Filter: ((t.status)::text = 'completed'::text)
+                    Rows Removed by Filter: 583
+                    Heap Blocks: exact=306
+                    Buffers: shared hit=311
+                    ->  Bitmap Index Scan on idx_transactions_user_id  (cost=0.00..17.66 rows=1250 width=0) (actual time=0.030..0.030 rows=1253.00 loops=1)
+                          Index Cond: (t.user_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=5
+              ->  Hash  (cost=1.10..1.10 rows=10 width=21) (actual time=0.005..0.005 rows=10.00 loops=1)
+                    Output: m.category, m.merchant_id
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=21) (actual time=0.002..0.002 rows=10.00 loops=1)
+                          Output: m.category, m.merchant_id
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=340
+Planning Time: 0.427 ms
+Execution Time: 0.533 ms

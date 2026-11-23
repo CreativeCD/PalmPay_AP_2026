@@ -1,0 +1,35 @@
+=== W01 run 1 ===
+Insert on public.users  (cost=0.00..0.01 rows=1 width=1266) (actual time=0.176..0.177 rows=1.00 loops=1)
+  Output: users.user_id, users.name, users.email, users.created_at
+  Buffers: shared hit=69 dirtied=4
+  ->  Result  (cost=0.00..0.01 rows=1 width=1266) (actual time=0.026..0.026 rows=1.00 loops=1)
+        Output: nextval('users_user_id_seq'), 'Bench New User'::character varying(100), 'bench.newuser@palmpay.internal'::character varying(255), '$2b$12$K8yR2u/pMv9.7x9gC2K9xOx4E2f7Z.4rK8yR2u/pMv9.7x9gC2K9x'::character varying(255), CURRENT_TIMESTAMP
+        Buffers: shared hit=12 dirtied=1
+Planning:
+  Buffers: shared hit=6
+Planning Time: 0.060 ms
+Execution Time: 0.191 ms
+
+=== W01 run 2 ===
+Insert on public.users  (cost=0.00..0.01 rows=1 width=1266) (actual time=0.147..0.147 rows=1.00 loops=1)
+  Output: users.user_id, users.name, users.email, users.created_at
+  Buffers: shared hit=69
+  ->  Result  (cost=0.00..0.01 rows=1 width=1266) (actual time=0.018..0.018 rows=1.00 loops=1)
+        Output: nextval('users_user_id_seq'), 'Bench New User'::character varying(100), 'bench.newuser@palmpay.internal'::character varying(255), '$2b$12$K8yR2u/pMv9.7x9gC2K9xOx4E2f7Z.4rK8yR2u/pMv9.7x9gC2K9x'::character varying(255), CURRENT_TIMESTAMP
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=6
+Planning Time: 0.060 ms
+Execution Time: 0.162 ms
+
+=== W01 run 3 ===
+Insert on public.users  (cost=0.00..0.01 rows=1 width=1266) (actual time=0.138..0.138 rows=1.00 loops=1)
+  Output: users.user_id, users.name, users.email, users.created_at
+  Buffers: shared hit=69
+  ->  Result  (cost=0.00..0.01 rows=1 width=1266) (actual time=0.017..0.018 rows=1.00 loops=1)
+        Output: nextval('users_user_id_seq'), 'Bench New User'::character varying(100), 'bench.newuser@palmpay.internal'::character varying(255), '$2b$12$K8yR2u/pMv9.7x9gC2K9xOx4E2f7Z.4rK8yR2u/pMv9.7x9gC2K9x'::character varying(255), CURRENT_TIMESTAMP
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=6
+Planning Time: 0.057 ms
+Execution Time: 0.152 ms

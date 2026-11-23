@@ -1,0 +1,38 @@
+=== W04 run 1 ===
+Delete on public.biometric_templates  (cost=0.28..8.30 rows=0 width=0) (actual time=0.041..0.041 rows=0.00 loops=1)
+  Buffers: shared hit=8 dirtied=1
+  ->  Index Scan using idx_biometric_templates_user_id on public.biometric_templates  (cost=0.28..8.30 rows=1 width=6) (actual time=0.010..0.010 rows=1.00 loops=1)
+        Output: ctid
+        Index Cond: (biometric_templates.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=93
+Planning Time: 0.183 ms
+Execution Time: 0.094 ms
+
+=== W04 run 2 ===
+Delete on public.biometric_templates  (cost=0.28..8.30 rows=0 width=0) (actual time=0.020..0.020 rows=0.00 loops=1)
+  Buffers: shared hit=7
+  ->  Index Scan using idx_biometric_templates_user_id on public.biometric_templates  (cost=0.28..8.30 rows=1 width=6) (actual time=0.013..0.013 rows=1.00 loops=1)
+        Output: ctid
+        Index Cond: (biometric_templates.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=93
+Planning Time: 0.166 ms
+Execution Time: 0.060 ms
+
+=== W04 run 3 ===
+Delete on public.biometric_templates  (cost=0.28..8.30 rows=0 width=0) (actual time=0.020..0.020 rows=0.00 loops=1)
+  Buffers: shared hit=7
+  ->  Index Scan using idx_biometric_templates_user_id on public.biometric_templates  (cost=0.28..8.30 rows=1 width=6) (actual time=0.013..0.013 rows=1.00 loops=1)
+        Output: ctid
+        Index Cond: (biometric_templates.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=93
+Planning Time: 0.177 ms
+Execution Time: 0.063 ms

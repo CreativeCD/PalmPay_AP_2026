@@ -1,0 +1,44 @@
+=== R06 run 1 ===
+Sort  (cost=1.27..1.29 rows=10 width=40) (actual time=0.403..0.403 rows=10.00 loops=1)
+  Output: merchant_id, name, category
+  Sort Key: merchants.name
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=4
+  ->  Seq Scan on public.merchants  (cost=0.00..1.10 rows=10 width=40) (actual time=0.002..0.003 rows=10.00 loops=1)
+        Output: merchant_id, name, category
+        Filter: merchants.active
+        Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=88
+Planning Time: 0.147 ms
+Execution Time: 0.417 ms
+
+=== R06 run 2 ===
+Sort  (cost=1.27..1.29 rows=10 width=40) (actual time=0.019..0.019 rows=10.00 loops=1)
+  Output: merchant_id, name, category
+  Sort Key: merchants.name
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=4
+  ->  Seq Scan on public.merchants  (cost=0.00..1.10 rows=10 width=40) (actual time=0.002..0.003 rows=10.00 loops=1)
+        Output: merchant_id, name, category
+        Filter: merchants.active
+        Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=88
+Planning Time: 0.129 ms
+Execution Time: 0.033 ms
+
+=== R06 run 3 ===
+Sort  (cost=1.27..1.29 rows=10 width=40) (actual time=0.020..0.021 rows=10.00 loops=1)
+  Output: merchant_id, name, category
+  Sort Key: merchants.name
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=4
+  ->  Seq Scan on public.merchants  (cost=0.00..1.10 rows=10 width=40) (actual time=0.002..0.003 rows=10.00 loops=1)
+        Output: merchant_id, name, category
+        Filter: merchants.active
+        Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=88
+Planning Time: 0.140 ms
+Execution Time: 0.035 ms

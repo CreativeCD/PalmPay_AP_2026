@@ -1,0 +1,77 @@
+=== R15 run 1 ===
+GroupAggregate  (cost=406.60..436.40 rows=1192 width=48) (actual time=0.500..0.538 rows=11.00 loops=1)
+  Output: (date_trunc('month'::text, created_at)), count(transaction_id), sum(amount)
+  Group Key: (date_trunc('month'::text, transactions.created_at))
+  Buffers: shared hit=314
+  ->  Sort  (cost=406.60..409.58 rows=1192 width=22) (actual time=0.490..0.501 rows=667.00 loops=1)
+        Output: (date_trunc('month'::text, created_at)), transaction_id, amount
+        Sort Key: (date_trunc('month'::text, transactions.created_at)) DESC
+        Sort Method: quicksort  Memory: 51kB
+        Buffers: shared hit=314
+        ->  Bitmap Heap Scan on public.transactions  (cost=17.96..345.69 rows=1192 width=22) (actual time=0.054..0.457 rows=667.00 loops=1)
+              Output: date_trunc('month'::text, created_at), transaction_id, amount
+              Recheck Cond: (transactions.user_id = 1)
+              Filter: ((transactions.status)::text = 'completed'::text)
+              Rows Removed by Filter: 583
+              Heap Blocks: exact=306
+              Buffers: shared hit=311
+              ->  Bitmap Index Scan on idx_transactions_user_id  (cost=0.00..17.66 rows=1250 width=0) (actual time=0.022..0.022 rows=1253.00 loops=1)
+                    Index Cond: (transactions.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=214
+Planning Time: 0.363 ms
+Execution Time: 0.570 ms
+
+=== R15 run 2 ===
+GroupAggregate  (cost=406.60..436.40 rows=1192 width=48) (actual time=0.467..0.506 rows=11.00 loops=1)
+  Output: (date_trunc('month'::text, created_at)), count(transaction_id), sum(amount)
+  Group Key: (date_trunc('month'::text, transactions.created_at))
+  Buffers: shared hit=314
+  ->  Sort  (cost=406.60..409.58 rows=1192 width=22) (actual time=0.458..0.470 rows=667.00 loops=1)
+        Output: (date_trunc('month'::text, created_at)), transaction_id, amount
+        Sort Key: (date_trunc('month'::text, transactions.created_at)) DESC
+        Sort Method: quicksort  Memory: 51kB
+        Buffers: shared hit=314
+        ->  Bitmap Heap Scan on public.transactions  (cost=17.96..345.69 rows=1192 width=22) (actual time=0.046..0.428 rows=667.00 loops=1)
+              Output: date_trunc('month'::text, created_at), transaction_id, amount
+              Recheck Cond: (transactions.user_id = 1)
+              Filter: ((transactions.status)::text = 'completed'::text)
+              Rows Removed by Filter: 583
+              Heap Blocks: exact=306
+              Buffers: shared hit=311
+              ->  Bitmap Index Scan on idx_transactions_user_id  (cost=0.00..17.66 rows=1250 width=0) (actual time=0.022..0.022 rows=1253.00 loops=1)
+                    Index Cond: (transactions.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=214
+Planning Time: 0.298 ms
+Execution Time: 0.534 ms
+
+=== R15 run 3 ===
+GroupAggregate  (cost=406.60..436.40 rows=1192 width=48) (actual time=0.464..0.502 rows=11.00 loops=1)
+  Output: (date_trunc('month'::text, created_at)), count(transaction_id), sum(amount)
+  Group Key: (date_trunc('month'::text, transactions.created_at))
+  Buffers: shared hit=314
+  ->  Sort  (cost=406.60..409.58 rows=1192 width=22) (actual time=0.454..0.465 rows=667.00 loops=1)
+        Output: (date_trunc('month'::text, created_at)), transaction_id, amount
+        Sort Key: (date_trunc('month'::text, transactions.created_at)) DESC
+        Sort Method: quicksort  Memory: 51kB
+        Buffers: shared hit=314
+        ->  Bitmap Heap Scan on public.transactions  (cost=17.96..345.69 rows=1192 width=22) (actual time=0.045..0.425 rows=667.00 loops=1)
+              Output: date_trunc('month'::text, created_at), transaction_id, amount
+              Recheck Cond: (transactions.user_id = 1)
+              Filter: ((transactions.status)::text = 'completed'::text)
+              Rows Removed by Filter: 583
+              Heap Blocks: exact=306
+              Buffers: shared hit=311
+              ->  Bitmap Index Scan on idx_transactions_user_id  (cost=0.00..17.66 rows=1250 width=0) (actual time=0.022..0.022 rows=1253.00 loops=1)
+                    Index Cond: (transactions.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=214
+Planning Time: 0.297 ms
+Execution Time: 0.531 ms

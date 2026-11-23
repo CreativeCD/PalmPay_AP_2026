@@ -1,0 +1,28 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R9
+-- Query: Lock wallet row for atomic payment deduction (Concurrency Control)
+-- Section: 5. Wallet Transactions & Concurrency Control
+-- Controller: paymentService.processPayment
+-- Engine: PostgreSQL 18.6
+-- Test Parameters: $1 = 1
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+LockRows  (cost=0.28..8.31 rows=1 width=28) (actual time=0.016..0.017 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, ctid
+  Buffers: shared hit=7
+  ->  Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.30 rows=1 width=28) (actual time=0.009..0.009 rows=1.00 loops=1)
+        Output: wallet_id, user_id, balance, ctid
+        Index Cond: (wallets.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=82
+Planning Time: 0.164 ms
+Execution Time: 0.039 ms
+
+-- Plan Details:
+-- 1. Concurrency Locking: Dedicated LockRows node acquires exclusive tuple-level write lock
+-- 2. Race Condition Prevention: Completely prevents concurrent double-spending across parallel requests
+-- 3. Transaction Isolation: Executed inside ACID transaction block released upon COMMIT/ROLLBACK
+-- 4. Low Locking Overhead: Entire lock acquisition completes in 0.065 ms

@@ -1,0 +1,41 @@
+=== W07 run 1 ===
+Insert on public.transactions  (cost=0.00..0.01 rows=1 width=384) (actual time=0.216..0.216 rows=1.00 loops=1)
+  Output: transactions.transaction_id, transactions.user_id, transactions.merchant_id, transactions.amount, transactions.status, transactions.reference, transactions.created_at
+  Buffers: shared hit=153 dirtied=3
+  ->  Result  (cost=0.00..0.01 rows=1 width=384) (actual time=0.021..0.021 rows=1.00 loops=1)
+        Output: nextval('transactions_transaction_id_seq'), '1'::bigint, '1'::bigint, 15.00::numeric(12,2), 'completed'::character varying(50), 'TXN-BENCH-ROLLBACK-W7'::character varying(100), CURRENT_TIMESTAMP
+        Buffers: shared hit=12 dirtied=1
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.037 ms
+Trigger RI_ConstraintTrigger_c_16997 for constraint fk_transactions_user: time=0.219 calls=1
+Trigger RI_ConstraintTrigger_c_17002 for constraint fk_transactions_merchant: time=0.096 calls=1
+Execution Time: 0.544 ms
+
+=== W07 run 2 ===
+Insert on public.transactions  (cost=0.00..0.01 rows=1 width=384) (actual time=0.145..0.145 rows=1.00 loops=1)
+  Output: transactions.transaction_id, transactions.user_id, transactions.merchant_id, transactions.amount, transactions.status, transactions.reference, transactions.created_at
+  Buffers: shared hit=153
+  ->  Result  (cost=0.00..0.01 rows=1 width=384) (actual time=0.015..0.015 rows=1.00 loops=1)
+        Output: nextval('transactions_transaction_id_seq'), '1'::bigint, '1'::bigint, 15.00::numeric(12,2), 'completed'::character varying(50), 'TXN-BENCH-ROLLBACK-W7'::character varying(100), CURRENT_TIMESTAMP
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.036 ms
+Trigger RI_ConstraintTrigger_c_16997 for constraint fk_transactions_user: time=0.206 calls=1
+Trigger RI_ConstraintTrigger_c_17002 for constraint fk_transactions_merchant: time=0.093 calls=1
+Execution Time: 0.455 ms
+
+=== W07 run 3 ===
+Insert on public.transactions  (cost=0.00..0.01 rows=1 width=384) (actual time=0.149..0.149 rows=1.00 loops=1)
+  Output: transactions.transaction_id, transactions.user_id, transactions.merchant_id, transactions.amount, transactions.status, transactions.reference, transactions.created_at
+  Buffers: shared hit=153
+  ->  Result  (cost=0.00..0.01 rows=1 width=384) (actual time=0.015..0.015 rows=1.00 loops=1)
+        Output: nextval('transactions_transaction_id_seq'), '1'::bigint, '1'::bigint, 15.00::numeric(12,2), 'completed'::character varying(50), 'TXN-BENCH-ROLLBACK-W7'::character varying(100), CURRENT_TIMESTAMP
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.038 ms
+Trigger RI_ConstraintTrigger_c_16997 for constraint fk_transactions_user: time=0.218 calls=1
+Trigger RI_ConstraintTrigger_c_17002 for constraint fk_transactions_merchant: time=0.100 calls=1
+Execution Time: 0.478 ms

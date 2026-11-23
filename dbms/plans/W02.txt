@@ -1,0 +1,35 @@
+=== W02 run 1 ===
+INSERT 0 1
+Insert on public.wallets  (cost=0.00..0.02 rows=1 width=40) (actual time=0.180..0.180 rows=1.00 loops=1)
+  Output: wallets.wallet_id, wallets.user_id, wallets.balance, wallets.updated_at
+  Buffers: shared hit=49 dirtied=5
+  ->  Result  (cost=0.00..0.02 rows=1 width=40) (actual time=0.019..0.019 rows=1.00 loops=1)
+        Output: nextval('wallets_wallet_id_seq'), currval('users_user_id_seq'::regclass), 1000.00::numeric(12,2), CURRENT_TIMESTAMP
+        Buffers: shared hit=11 dirtied=1
+Planning Time: 0.009 ms
+Trigger RI_ConstraintTrigger_c_16945 for constraint fk_wallets_user: time=0.212 calls=1
+Execution Time: 0.399 ms
+
+=== W02 run 2 ===
+INSERT 0 1
+Insert on public.wallets  (cost=0.00..0.02 rows=1 width=40) (actual time=0.094..0.095 rows=1.00 loops=1)
+  Output: wallets.wallet_id, wallets.user_id, wallets.balance, wallets.updated_at
+  Buffers: shared hit=48
+  ->  Result  (cost=0.00..0.02 rows=1 width=40) (actual time=0.008..0.008 rows=1.00 loops=1)
+        Output: nextval('wallets_wallet_id_seq'), currval('users_user_id_seq'::regclass), 1000.00::numeric(12,2), CURRENT_TIMESTAMP
+        Buffers: shared hit=11
+Planning Time: 0.006 ms
+Trigger RI_ConstraintTrigger_c_16945 for constraint fk_wallets_user: time=0.194 calls=1
+Execution Time: 0.294 ms
+
+=== W02 run 3 ===
+INSERT 0 1
+Insert on public.wallets  (cost=0.00..0.02 rows=1 width=40) (actual time=0.082..0.082 rows=1.00 loops=1)
+  Output: wallets.wallet_id, wallets.user_id, wallets.balance, wallets.updated_at
+  Buffers: shared hit=48
+  ->  Result  (cost=0.00..0.02 rows=1 width=40) (actual time=0.007..0.007 rows=1.00 loops=1)
+        Output: nextval('wallets_wallet_id_seq'), currval('users_user_id_seq'::regclass), 1000.00::numeric(12,2), CURRENT_TIMESTAMP
+        Buffers: shared hit=11
+Planning Time: 0.006 ms
+Trigger RI_ConstraintTrigger_c_16945 for constraint fk_wallets_user: time=0.192 calls=1
+Execution Time: 0.279 ms

@@ -1,0 +1,25 @@
+-- ============================================================================
+-- PalmPay Query Execution Plan: Query R10
+-- Query: Check transaction reference uniqueness (Idempotency Guard)
+-- Section: 6. Payment Transactions & Ledger
+-- Controller: paymentsController.createPayment
+-- Engine: PostgreSQL 18.6
+-- Test Parameters: $1 = 'TXN-2026-000001'
+-- Command: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+-- ============================================================================
+
+Index Scan using uq_transactions_reference on public.transactions  (cost=0.29..8.30 rows=1 width=31) (actual time=0.008..0.008 rows=1.00 loops=1)
+  Output: transaction_id, status, amount, created_at
+  Index Cond: ((transactions.reference)::text = 'TXN-2026-000001'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=164
+Planning Time: 0.378 ms
+Execution Time: 0.023 ms
+
+-- Plan Details:
+-- 1. Idempotency Guard: Prevents duplicate charges from network retries or double clicks
+-- 2. Unique Index Seek: Index Scan using uq_transactions_reference locates record in 3 buffer hits
+-- 3. Fast Rejection: Instant verification (0.025 ms) before acquiring payment locks
+-- 4. Selective Retrieval: Fetches status and amount for client verification

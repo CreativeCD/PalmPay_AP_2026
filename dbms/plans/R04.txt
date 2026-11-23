@@ -1,0 +1,80 @@
+=== R04 run 1 ===
+Limit  (cost=16.62..16.62 rows=1 width=121) (actual time=0.019..0.019 rows=1.00 loops=1)
+  Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+  Buffers: shared hit=14
+  ->  Sort  (cost=16.62..16.62 rows=1 width=121) (actual time=0.018..0.018 rows=1.00 loops=1)
+        Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+        Sort Key: bt.created_at DESC
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=14
+        ->  Nested Loop  (cost=0.56..16.61 rows=1 width=121) (actual time=0.010..0.012 rows=1.00 loops=1)
+              Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+              Buffers: shared hit=11
+              ->  Index Scan using idx_biometric_templates_user_id on public.biometric_templates bt  (cost=0.28..8.30 rows=1 width=81) (actual time=0.006..0.007 rows=1.00 loops=1)
+                    Output: bt.template_id, bt.user_id, bt.template_reference, bt.method, bt.created_at
+                    Index Cond: (bt.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=8
+              ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.003..0.003 rows=1.00 loops=1)
+                    Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+                    Index Cond: (u.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=201 dirtied=3
+Planning Time: 0.345 ms
+Execution Time: 0.033 ms
+
+=== R04 run 2 ===
+Limit  (cost=16.62..16.62 rows=1 width=121) (actual time=0.018..0.018 rows=1.00 loops=1)
+  Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+  Buffers: shared hit=12
+  ->  Sort  (cost=16.62..16.62 rows=1 width=121) (actual time=0.018..0.018 rows=1.00 loops=1)
+        Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+        Sort Key: bt.created_at DESC
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=12
+        ->  Nested Loop  (cost=0.56..16.61 rows=1 width=121) (actual time=0.010..0.011 rows=1.00 loops=1)
+              Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+              Buffers: shared hit=9
+              ->  Index Scan using idx_biometric_templates_user_id on public.biometric_templates bt  (cost=0.28..8.30 rows=1 width=81) (actual time=0.006..0.006 rows=1.00 loops=1)
+                    Output: bt.template_id, bt.user_id, bt.template_reference, bt.method, bt.created_at
+                    Index Cond: (bt.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=6
+              ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.003..0.003 rows=1.00 loops=1)
+                    Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+                    Index Cond: (u.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=193
+Planning Time: 0.301 ms
+Execution Time: 0.035 ms
+
+=== R04 run 3 ===
+Limit  (cost=16.62..16.62 rows=1 width=121) (actual time=0.017..0.017 rows=1.00 loops=1)
+  Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+  Buffers: shared hit=12
+  ->  Sort  (cost=16.62..16.62 rows=1 width=121) (actual time=0.016..0.016 rows=1.00 loops=1)
+        Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+        Sort Key: bt.created_at DESC
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=12
+        ->  Nested Loop  (cost=0.56..16.61 rows=1 width=121) (actual time=0.010..0.010 rows=1.00 loops=1)
+              Output: bt.template_id, bt.user_id, u.name, u.email, bt.template_reference, bt.method, bt.created_at
+              Buffers: shared hit=9
+              ->  Index Scan using idx_biometric_templates_user_id on public.biometric_templates bt  (cost=0.28..8.30 rows=1 width=81) (actual time=0.006..0.006 rows=1.00 loops=1)
+                    Output: bt.template_id, bt.user_id, bt.template_reference, bt.method, bt.created_at
+                    Index Cond: (bt.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=6
+              ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.003..0.003 rows=1.00 loops=1)
+                    Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+                    Index Cond: (u.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=193
+Planning Time: 0.287 ms
+Execution Time: 0.030 ms
