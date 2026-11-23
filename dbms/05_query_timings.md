@@ -95,6 +95,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 1: User Registration & Authentication
 
 #### Query R1: Check Email Availability
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R1** | 0.021 | 0.020 | 0.021 | **0.021** |
+
 - **SQL Statement:**
   ```sql
   SELECT user_id, email
@@ -114,6 +120,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query W1: Register New User Account
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **W1** | 0.191 | 0.162 | 0.152 | **0.168** |
+
 - **SQL Statement:**
   ```sql
   INSERT INTO users (name, email, password_hash)
@@ -133,6 +145,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query W2: Initialize User Demo Wallet
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **W2** | 0.399 | 0.294 | 0.279 | **0.324** |
+
 - **SQL Statement:**
   ```sql
   INSERT INTO wallets (user_id, balance)
@@ -152,6 +170,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R2: Authenticate User Login Credentials
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R2** | 0.021 | 0.016 | 0.018 | **0.018** |
+
 - **SQL Statement:**
   ```sql
   SELECT user_id, name, email, password_hash
@@ -170,6 +194,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R3: Get Authenticated User Profile with Wallet Summary (JOIN)
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R3** | 0.036 | 0.035 | 0.032 | **0.034** |
+
 - **SQL Statement:**
   ```sql
   SELECT u.user_id,
@@ -199,6 +229,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 2: Biometric Template Enrollment & Verification
 
 #### Query W3: Enroll or Update User Biometric Template
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **W3** | 0.404 | 0.301 | 0.311 | **0.339** |
+
 - **SQL Statement:**
   ```sql
   INSERT INTO biometric_templates (user_id, template_reference, method)
@@ -217,6 +253,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R4: Retrieve Latest Biometric Template with User Verification (JOIN)
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R4** | 0.033 | 0.035 | 0.030 | **0.033** |
+
 - **SQL Statement:**
   ```sql
   SELECT bt.template_id,
@@ -244,6 +286,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query W4: Reset / Delete Existing Biometric Template Enrollment
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **W4** | 0.094 | 0.060 | 0.063 | **0.072** |
+
 - **SQL Statement:**
   ```sql
   DELETE FROM biometric_templates
@@ -262,6 +310,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 3: Security & Biometric Audit Logging
 
 #### Query W5: Insert Authentication / Biometric Audit Log Record
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **W5** | 0.421 | 0.404 | 0.332 | **0.386** |
+
 - **SQL Statement:**
   ```sql
   INSERT INTO auth_logs (user_id, method, result, score)
@@ -280,6 +334,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R5: Retrieve User Authentication Audit Logs with User Details (LEFT JOIN)
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R5** | 0.385 | 0.382 | 0.479 | **0.415** |
+
 - **SQL Statement:**
   ```sql
   SELECT al.auth_log_id,
@@ -309,6 +369,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 4: Merchant Catalog & Validation
 
 #### Query R6: List All Active Merchants for Payment Checkout
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R6** | 0.417 | 0.033 | 0.035 | **0.162** |
+
 - **SQL Statement:**
   ```sql
   SELECT merchant_id,
@@ -334,6 +400,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 4 (Cont.): Merchant Validation
 
 #### Query R7: Validate Merchant Status
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R7** | 0.018 | 0.018 | 0.018 | **0.018** |
+
 - **SQL Statement:**
   ```sql
   SELECT merchant_id,
@@ -358,6 +430,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 5: Wallet Transactions & Concurrency Control
 
 #### Query R8: Fetch Current Wallet Balance
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R8** | 0.027 | 0.024 | 0.025 | **0.025** |
+
 - **SQL Statement:**
   ```sql
   SELECT wallet_id,
@@ -379,6 +457,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R9: Lock Wallet Row for Atomic Payment Deduction (`FOR UPDATE`)
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R9** | 0.075 | 0.064 | 0.055 | **0.065** |
+
 - **SQL Statement:**
   ```sql
   SELECT wallet_id,
@@ -389,7 +473,8 @@ To ensure the optimizer produces realistic production-like execution plans rathe
      FOR UPDATE;
   ```
 - **Test Parameters:** `$1 = 1`
-- **Access Strategy:** `LockRows` $ightarrow$ `Index Scan using uq_wallets_user_id on public.wallets`
+- **Access Strategy:** `LockRows` $
+ightarrow$ `Index Scan using uq_wallets_user_id on public.wallets`
 - **Cost Metrics:** Estimated `cost=0.28..8.30`, Planning Time = `0.198 ms`, Execution Time = `0.065 ms`
 - **Buffer I/O:** 4 shared buffer hits.
 - **Optimization Rationale:**
@@ -401,6 +486,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query W6: Debit Wallet Balance Following Successful Authorization
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **W6** | 0.146 | 0.125 | 0.124 | **0.132** |
+
 - **SQL Statement:**
   ```sql
   UPDATE wallets
@@ -424,6 +515,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 6: Payment Transactions & Ledger
 
 #### Query W7: Record Completed Payment Transaction in Ledger
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **W7** | 0.544 | 0.455 | 0.478 | **0.492** |
+
 - **SQL Statement:**
   ```sql
   INSERT INTO transactions (user_id, merchant_id, amount, status, reference)
@@ -443,6 +540,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R10: Check Transaction Reference Uniqueness (Idempotency Guard)
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R10** | 0.030 | 0.023 | 0.022 | **0.025** |
+
 - **SQL Statement:**
   ```sql
   SELECT transaction_id,
@@ -464,6 +567,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R11: Retrieve User Transaction History with Merchant Details (JOIN)
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R11** | 0.697 | 0.685 | 0.681 | **0.688** |
+
 - **SQL Statement:**
   ```sql
   SELECT t.transaction_id,
@@ -480,7 +589,9 @@ To ensure the optimizer produces realistic production-like execution plans rathe
    ORDER BY t.created_at DESC;
   ```
 - **Test Parameters:** `$1 = 1` (1,250 matching transactions)
-- **Access Strategy:** `Sort` $ightarrow$ `Hash Join` $ightarrow$ `Bitmap Heap Scan on public.transactions` (`idx_transactions_user_id`) + `Seq Scan on public.merchants`
+- **Access Strategy:** `Sort` $
+ightarrow$ `Hash Join` $
+ightarrow$ `Bitmap Heap Scan on public.transactions` (`idx_transactions_user_id`) + `Seq Scan on public.merchants`
 - **Cost Metrics:** Estimated `cost=19.20..412.92`, Planning Time = `0.430 ms`, Execution Time = `0.688 ms`
 - **Buffer I/O:** 315 shared buffer hits.
 - **Optimization Rationale:**
@@ -492,6 +603,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R12: Comprehensive Transaction Receipt Lookup (MULTI-TABLE JOIN)
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R12** | 0.032 | 0.033 | 0.033 | **0.033** |
+
 - **SQL Statement:**
   ```sql
   SELECT t.transaction_id,
@@ -511,7 +628,9 @@ To ensure the optimizer produces realistic production-like execution plans rathe
    WHERE t.transaction_id = $1;
   ```
 - **Test Parameters:** `$1 = 1`
-- **Access Strategy:** `Nested Loop` (`transactions_pkey` $ightarrow$ `users_pkey` $ightarrow$ `merchants`)
+- **Access Strategy:** `Nested Loop` (`transactions_pkey` $
+ightarrow$ `users_pkey` $
+ightarrow$ `merchants`)
 - **Cost Metrics:** Estimated `cost=0.85..24.92`, Planning Time = `0.597 ms`, Execution Time = `0.033 ms`
 - **Buffer I/O:** 8 shared buffer hits.
 - **Optimization Rationale:**
@@ -524,6 +643,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ### Section 7: Aggregate Queries & Financial Analytics
 
 #### Query R13: User Expenditure Summary Aggregated by Category
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R13** | 0.595 | 0.520 | 0.533 | **0.549** |
+
 - **SQL Statement:**
   ```sql
   SELECT m.category,
@@ -538,7 +663,10 @@ To ensure the optimizer produces realistic production-like execution plans rathe
    ORDER BY total_spent DESC;
   ```
 - **Test Parameters:** `$1 = 1`
-- **Access Strategy:** `Sort` $ightarrow$ `HashAggregate` $ightarrow$ `Hash Join` $ightarrow$ `Bitmap Heap Scan on public.transactions` (`idx_transactions_user_id`)
+- **Access Strategy:** `Sort` $
+ightarrow$ `HashAggregate` $
+ightarrow$ `Hash Join` $
+ightarrow$ `Bitmap Heap Scan on public.transactions` (`idx_transactions_user_id`)
 - **Cost Metrics:** Estimated `cost=20.45..355.80`, Planning Time = `0.827 ms`, Execution Time = `0.549 ms`
 - **Buffer I/O:** 315 shared buffer hits.
 - **Optimization Rationale:**
@@ -549,6 +677,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R14: Merchant Total Revenue and Transaction Volume Summary
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R14** | 4.408 | 4.290 | 4.292 | **4.330** |
+
 - **SQL Statement:**
   ```sql
   SELECT m.merchant_id,
@@ -564,7 +698,10 @@ To ensure the optimizer produces realistic production-like execution plans rathe
    ORDER BY total_revenue DESC;
   ```
 - **Test Parameters:** None (Table-wide analytics)
-- **Access Strategy:** `Sort` $ightarrow$ `HashAggregate` $ightarrow$ `Hash Right Join` $ightarrow$ `Seq Scan on public.transactions` (25,000 rows) + `Seq Scan on public.merchants`
+- **Access Strategy:** `Sort` $
+ightarrow$ `HashAggregate` $
+ightarrow$ `Hash Right Join` $
+ightarrow$ `Seq Scan on public.transactions` (25,000 rows) + `Seq Scan on public.merchants`
 - **Cost Metrics:** Estimated `cost=1.23..887.86`, Planning Time = `0.389 ms`, Execution Time = `4.330 ms`
 - **Buffer I/O:** 310 shared buffer hits.
 - **Optimization Rationale:**
@@ -576,6 +713,12 @@ To ensure the optimizer produces realistic production-like execution plans rathe
 ---
 
 #### Query R15: User Monthly Spending Summary
+- **Multi-Run Benchmark Timings:**
+
+  | Query ID | Run 1 (ms) | Run 2 (ms) | Run 3 (ms) | Average (ms) |
+  |:---|---:|---:|---:|---:|
+  | **R15** | 0.570 | 0.534 | 0.531 | **0.545** |
+
 - **SQL Statement:**
   ```sql
   SELECT DATE_TRUNC('month', created_at) AS transaction_month,
@@ -588,7 +731,9 @@ To ensure the optimizer produces realistic production-like execution plans rathe
    ORDER BY transaction_month DESC;
   ```
 - **Test Parameters:** `$1 = 1`
-- **Access Strategy:** `Sort` $ightarrow$ `HashAggregate` $ightarrow$ `Bitmap Heap Scan on public.transactions` (`idx_transactions_user_id`)
+- **Access Strategy:** `Sort` $
+ightarrow$ `HashAggregate` $
+ightarrow$ `Bitmap Heap Scan on public.transactions` (`idx_transactions_user_id`)
 - **Cost Metrics:** Estimated `cost=20.15..347.20`, Planning Time = `0.363 ms`, Execution Time = `0.545 ms`
 - **Buffer I/O:** 311 shared buffer hits.
 - **Optimization Rationale:**
