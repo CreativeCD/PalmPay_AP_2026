@@ -27,3 +27,49 @@ Execution Time: 0.161 ms
 -- 2. Update via Index Scan: Navigates using uq_wallets_user_id to locate target tuple
 -- 3. Atomic RETURNING Clause: Emits new wallet balance without requiring separate round-trip SELECT
 -- 4. Execution Speed: Sub-0.15 ms execution with transaction-safe rollback
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== W06 run 1 ===
+Update on public.wallets  (cost=0.28..8.31 rows=1 width=30) (actual time=0.100..0.101 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, updated_at
+  Buffers: shared hit=26 dirtied=2
+  ->  Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.31 rows=1 width=30) (actual time=0.010..0.011 rows=1.00 loops=1)
+        Output: (balance - 10.00), CURRENT_TIMESTAMP, ctid
+        Index Cond: (wallets.user_id = 1)
+        Filter: (wallets.balance >= 10.00)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=86
+Planning Time: 0.174 ms
+Execution Time: 0.146 ms
+
+=== W06 run 2 ===
+Update on public.wallets  (cost=0.28..8.31 rows=1 width=30) (actual time=0.077..0.080 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, updated_at
+  Buffers: shared hit=29
+  ->  Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.31 rows=1 width=30) (actual time=0.013..0.016 rows=1.00 loops=1)
+        Output: (balance - 10.00), CURRENT_TIMESTAMP, ctid
+        Index Cond: (wallets.user_id = 1)
+        Filter: (wallets.balance >= 10.00)
+        Index Searches: 1
+        Buffers: shared hit=8
+Planning:
+  Buffers: shared hit=86
+Planning Time: 0.169 ms
+Execution Time: 0.125 ms
+
+=== W06 run 3 ===
+Update on public.wallets  (cost=0.28..8.31 rows=1 width=30) (actual time=0.075..0.078 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, updated_at
+  Buffers: shared hit=29
+  ->  Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.31 rows=1 width=30) (actual time=0.014..0.016 rows=1.00 loops=1)
+        Output: (balance - 10.00), CURRENT_TIMESTAMP, ctid
+        Index Cond: (wallets.user_id = 1)
+        Filter: (wallets.balance >= 10.00)
+        Index Searches: 1
+        Buffers: shared hit=8
+Planning:
+  Buffers: shared hit=86
+Planning Time: 0.177 ms
+Execution Time: 0.124 ms

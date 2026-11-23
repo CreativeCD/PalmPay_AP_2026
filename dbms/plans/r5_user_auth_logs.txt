@@ -28,3 +28,103 @@ Execution Time: 0.092 ms
 -- 3. Outer/Inner: auth_logs is outer relation; users is inner relation joined via users_pkey
 -- 4. Left Join Handling: If user_id is NULL or user removed, left join ensures audit record is preserved with fallback display name
 -- 5. Cache Performance: 100% buffer hit (8 shared buffer pages accessed)
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== R05 run 1 ===
+Sort  (cost=224.36..226.36 rows=800 width=106) (actual time=0.336..0.349 rows=800.00 loops=1)
+  Output: al.auth_log_id, al.user_id, (COALESCE(u.name, 'Unauthenticated / Anonymous'::character varying)), u.email, al.method, al.result, al.score, al.created_at
+  Sort Key: al.created_at DESC
+  Sort Method: quicksort  Memory: 101kB
+  Buffers: shared hit=154
+  ->  Nested Loop Left Join  (cost=14.76..185.78 rows=800 width=106) (actual time=0.029..0.248 rows=800.00 loops=1)
+        Output: al.auth_log_id, al.user_id, COALESCE(u.name, 'Unauthenticated / Anonymous'::character varying), u.email, al.method, al.result, al.score, al.created_at
+        Inner Unique: true
+        Buffers: shared hit=151
+        ->  Bitmap Heap Scan on public.auth_logs al  (cost=14.48..167.49 rows=800 width=46) (actual time=0.021..0.169 rows=800.00 loops=1)
+              Output: al.auth_log_id, al.user_id, al.method, al.result, al.score, al.created_at
+              Recheck Cond: (al.user_id = 1)
+              Heap Blocks: exact=143
+              Buffers: shared hit=148
+              ->  Bitmap Index Scan on idx_auth_logs_user_id  (cost=0.00..14.29 rows=800 width=0) (actual time=0.012..0.012 rows=803.00 loops=1)
+                    Index Cond: (al.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=5
+        ->  Materialize  (cost=0.28..8.30 rows=1 width=48) (actual time=0.000..0.000 rows=1.00 loops=800)
+              Output: u.name, u.email, u.user_id
+              Storage: Memory  Maximum Storage: 17kB
+              Buffers: shared hit=3
+              ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.004..0.004 rows=1.00 loops=1)
+                    Output: u.name, u.email, u.user_id
+                    Index Cond: (u.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=356 dirtied=2
+Planning Time: 0.394 ms
+Execution Time: 0.385 ms
+
+=== R05 run 2 ===
+Sort  (cost=224.36..226.36 rows=800 width=106) (actual time=0.332..0.346 rows=800.00 loops=1)
+  Output: al.auth_log_id, al.user_id, (COALESCE(u.name, 'Unauthenticated / Anonymous'::character varying)), u.email, al.method, al.result, al.score, al.created_at
+  Sort Key: al.created_at DESC
+  Sort Method: quicksort  Memory: 101kB
+  Buffers: shared hit=154
+  ->  Nested Loop Left Join  (cost=14.76..185.78 rows=800 width=106) (actual time=0.028..0.245 rows=800.00 loops=1)
+        Output: al.auth_log_id, al.user_id, COALESCE(u.name, 'Unauthenticated / Anonymous'::character varying), u.email, al.method, al.result, al.score, al.created_at
+        Inner Unique: true
+        Buffers: shared hit=151
+        ->  Bitmap Heap Scan on public.auth_logs al  (cost=14.48..167.49 rows=800 width=46) (actual time=0.020..0.164 rows=800.00 loops=1)
+              Output: al.auth_log_id, al.user_id, al.method, al.result, al.score, al.created_at
+              Recheck Cond: (al.user_id = 1)
+              Heap Blocks: exact=143
+              Buffers: shared hit=148
+              ->  Bitmap Index Scan on idx_auth_logs_user_id  (cost=0.00..14.29 rows=800 width=0) (actual time=0.012..0.012 rows=803.00 loops=1)
+                    Index Cond: (al.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=5
+        ->  Materialize  (cost=0.28..8.30 rows=1 width=48) (actual time=0.000..0.000 rows=1.00 loops=800)
+              Output: u.name, u.email, u.user_id
+              Storage: Memory  Maximum Storage: 17kB
+              Buffers: shared hit=3
+              ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.004..0.004 rows=1.00 loops=1)
+                    Output: u.name, u.email, u.user_id
+                    Index Cond: (u.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=350
+Planning Time: 0.357 ms
+Execution Time: 0.382 ms
+
+=== R05 run 3 ===
+Sort  (cost=224.36..226.36 rows=800 width=106) (actual time=0.398..0.426 rows=800.00 loops=1)
+  Output: al.auth_log_id, al.user_id, (COALESCE(u.name, 'Unauthenticated / Anonymous'::character varying)), u.email, al.method, al.result, al.score, al.created_at
+  Sort Key: al.created_at DESC
+  Sort Method: quicksort  Memory: 101kB
+  Buffers: shared hit=154
+  ->  Nested Loop Left Join  (cost=14.76..185.78 rows=800 width=106) (actual time=0.039..0.297 rows=800.00 loops=1)
+        Output: al.auth_log_id, al.user_id, COALESCE(u.name, 'Unauthenticated / Anonymous'::character varying), u.email, al.method, al.result, al.score, al.created_at
+        Inner Unique: true
+        Buffers: shared hit=151
+        ->  Bitmap Heap Scan on public.auth_logs al  (cost=14.48..167.49 rows=800 width=46) (actual time=0.028..0.201 rows=800.00 loops=1)
+              Output: al.auth_log_id, al.user_id, al.method, al.result, al.score, al.created_at
+              Recheck Cond: (al.user_id = 1)
+              Heap Blocks: exact=143
+              Buffers: shared hit=148
+              ->  Bitmap Index Scan on idx_auth_logs_user_id  (cost=0.00..14.29 rows=800 width=0) (actual time=0.017..0.017 rows=803.00 loops=1)
+                    Index Cond: (al.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=5
+        ->  Materialize  (cost=0.28..8.30 rows=1 width=48) (actual time=0.000..0.000 rows=1.00 loops=800)
+              Output: u.name, u.email, u.user_id
+              Storage: Memory  Maximum Storage: 17kB
+              Buffers: shared hit=3
+              ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.006..0.006 rows=1.00 loops=1)
+                    Output: u.name, u.email, u.user_id
+                    Index Cond: (u.user_id = 1)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=350
+Planning Time: 0.452 ms
+Execution Time: 0.479 ms

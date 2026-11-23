@@ -23,3 +23,37 @@ Execution Time: 0.023 ms
 -- 2. Unique Index Seek: Index Scan using uq_transactions_reference locates record in 3 buffer hits
 -- 3. Fast Rejection: Instant verification (0.025 ms) before acquiring payment locks
 -- 4. Selective Retrieval: Fetches status and amount for client verification
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== R10 run 1 ===
+Index Scan using uq_transactions_reference on public.transactions  (cost=0.29..8.30 rows=1 width=31) (actual time=0.008..0.009 rows=1.00 loops=1)
+  Output: transaction_id, status, amount, created_at
+  Index Cond: ((transactions.reference)::text = 'TXN-2026-000001'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=170 dirtied=2
+Planning Time: 0.361 ms
+Execution Time: 0.030 ms
+
+=== R10 run 2 ===
+Index Scan using uq_transactions_reference on public.transactions  (cost=0.29..8.30 rows=1 width=31) (actual time=0.007..0.007 rows=1.00 loops=1)
+  Output: transaction_id, status, amount, created_at
+  Index Cond: ((transactions.reference)::text = 'TXN-2026-000001'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=164
+Planning Time: 0.298 ms
+Execution Time: 0.023 ms
+
+=== R10 run 3 ===
+Index Scan using uq_transactions_reference on public.transactions  (cost=0.29..8.30 rows=1 width=31) (actual time=0.007..0.008 rows=1.00 loops=1)
+  Output: transaction_id, status, amount, created_at
+  Index Cond: ((transactions.reference)::text = 'TXN-2026-000001'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=164
+Planning Time: 0.277 ms
+Execution Time: 0.022 ms

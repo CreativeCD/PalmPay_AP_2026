@@ -28,3 +28,61 @@ Execution Time: 0.072 ms
 -- 3. Inner Table: public.wallets via Unique Index on user_id (uq_wallets_user_id)
 -- 4. Complexity: O(log N + log M) point lookups, avoiding any sequential scan
 -- 5. Cache Performance: 100% buffer hit (6 shared buffer pages accessed)
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== R03 run 1 ===
+Nested Loop  (cost=0.56..16.61 rows=1 width=78) (actual time=0.012..0.013 rows=1.00 loops=1)
+  Output: u.user_id, u.name, u.email, u.created_at, w.wallet_id, w.balance, w.updated_at
+  Buffers: shared hit=9
+  ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=56) (actual time=0.008..0.008 rows=1.00 loops=1)
+        Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+        Index Cond: (u.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+  ->  Index Scan using uq_wallets_user_id on public.wallets w  (cost=0.28..8.30 rows=1 width=30) (actual time=0.003..0.004 rows=1.00 loops=1)
+        Output: w.wallet_id, w.user_id, w.balance, w.updated_at
+        Index Cond: (w.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=174 dirtied=1
+Planning Time: 0.315 ms
+Execution Time: 0.036 ms
+
+=== R03 run 2 ===
+Nested Loop  (cost=0.56..16.61 rows=1 width=78) (actual time=0.012..0.012 rows=1.00 loops=1)
+  Output: u.user_id, u.name, u.email, u.created_at, w.wallet_id, w.balance, w.updated_at
+  Buffers: shared hit=9
+  ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=56) (actual time=0.008..0.008 rows=1.00 loops=1)
+        Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+        Index Cond: (u.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+  ->  Index Scan using uq_wallets_user_id on public.wallets w  (cost=0.28..8.30 rows=1 width=30) (actual time=0.003..0.003 rows=1.00 loops=1)
+        Output: w.wallet_id, w.user_id, w.balance, w.updated_at
+        Index Cond: (w.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=164
+Planning Time: 0.258 ms
+Execution Time: 0.035 ms
+
+=== R03 run 3 ===
+Nested Loop  (cost=0.56..16.61 rows=1 width=78) (actual time=0.010..0.010 rows=1.00 loops=1)
+  Output: u.user_id, u.name, u.email, u.created_at, w.wallet_id, w.balance, w.updated_at
+  Buffers: shared hit=9
+  ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=56) (actual time=0.007..0.007 rows=1.00 loops=1)
+        Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+        Index Cond: (u.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+  ->  Index Scan using uq_wallets_user_id on public.wallets w  (cost=0.28..8.30 rows=1 width=30) (actual time=0.003..0.003 rows=1.00 loops=1)
+        Output: w.wallet_id, w.user_id, w.balance, w.updated_at
+        Index Cond: (w.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=164
+Planning Time: 0.250 ms
+Execution Time: 0.032 ms

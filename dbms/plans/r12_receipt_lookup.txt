@@ -41,3 +41,91 @@ Execution Time: 0.041 ms
 -- 2. Nested Loop Optimization: Primary key seeks on transactions_pkey and users_pkey eliminate scans
 -- 3. Comprehensive Voucher Data: Reconstructs normalized entities into complete receipt
 -- 4. Extreme Speed: 3-table join completes in 0.033 ms with 100% buffer hits
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== R12 run 1 ===
+Nested Loop  (cost=0.57..17.83 rows=1 width=135) (actual time=0.009..0.010 rows=1.00 loops=1)
+  Output: t.transaction_id, t.reference, t.amount, t.status, t.created_at, u.user_id, u.name, u.email, m.merchant_id, m.name, m.category
+  Inner Unique: true
+  Join Filter: (t.merchant_id = m.merchant_id)
+  Rows Removed by Join Filter: 1
+  Buffers: shared hit=10
+  ->  Nested Loop  (cost=0.57..16.61 rows=1 width=103) (actual time=0.008..0.008 rows=1.00 loops=1)
+        Output: t.transaction_id, t.reference, t.amount, t.status, t.created_at, t.merchant_id, u.user_id, u.name, u.email
+        Inner Unique: true
+        Buffers: shared hit=9
+        ->  Index Scan using transactions_pkey on public.transactions t  (cost=0.29..8.30 rows=1 width=63) (actual time=0.006..0.006 rows=1.00 loops=1)
+              Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+              Index Cond: (t.transaction_id = 1)
+              Index Searches: 1
+              Buffers: shared hit=6
+        ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.001..0.001 rows=1.00 loops=1)
+              Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+              Index Cond: (u.user_id = t.user_id)
+              Index Searches: 1
+              Buffers: shared hit=3
+  ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=40) (actual time=0.001..0.001 rows=2.00 loops=1)
+        Output: m.merchant_id, m.name, m.category, m.active
+        Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=386
+Planning Time: 0.597 ms
+Execution Time: 0.032 ms
+
+=== R12 run 2 ===
+Nested Loop  (cost=0.57..17.83 rows=1 width=135) (actual time=0.009..0.009 rows=1.00 loops=1)
+  Output: t.transaction_id, t.reference, t.amount, t.status, t.created_at, u.user_id, u.name, u.email, m.merchant_id, m.name, m.category
+  Inner Unique: true
+  Join Filter: (t.merchant_id = m.merchant_id)
+  Rows Removed by Join Filter: 1
+  Buffers: shared hit=10
+  ->  Nested Loop  (cost=0.57..16.61 rows=1 width=103) (actual time=0.007..0.007 rows=1.00 loops=1)
+        Output: t.transaction_id, t.reference, t.amount, t.status, t.created_at, t.merchant_id, u.user_id, u.name, u.email
+        Inner Unique: true
+        Buffers: shared hit=9
+        ->  Index Scan using transactions_pkey on public.transactions t  (cost=0.29..8.30 rows=1 width=63) (actual time=0.005..0.005 rows=1.00 loops=1)
+              Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+              Index Cond: (t.transaction_id = 1)
+              Index Searches: 1
+              Buffers: shared hit=6
+        ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.001..0.001 rows=1.00 loops=1)
+              Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+              Index Cond: (u.user_id = t.user_id)
+              Index Searches: 1
+              Buffers: shared hit=3
+  ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=40) (actual time=0.001..0.001 rows=2.00 loops=1)
+        Output: m.merchant_id, m.name, m.category, m.active
+        Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=384
+Planning Time: 0.578 ms
+Execution Time: 0.033 ms
+
+=== R12 run 3 ===
+Nested Loop  (cost=0.57..17.83 rows=1 width=135) (actual time=0.009..0.010 rows=1.00 loops=1)
+  Output: t.transaction_id, t.reference, t.amount, t.status, t.created_at, u.user_id, u.name, u.email, m.merchant_id, m.name, m.category
+  Inner Unique: true
+  Join Filter: (t.merchant_id = m.merchant_id)
+  Rows Removed by Join Filter: 1
+  Buffers: shared hit=10
+  ->  Nested Loop  (cost=0.57..16.61 rows=1 width=103) (actual time=0.007..0.008 rows=1.00 loops=1)
+        Output: t.transaction_id, t.reference, t.amount, t.status, t.created_at, t.merchant_id, u.user_id, u.name, u.email
+        Inner Unique: true
+        Buffers: shared hit=9
+        ->  Index Scan using transactions_pkey on public.transactions t  (cost=0.29..8.30 rows=1 width=63) (actual time=0.005..0.006 rows=1.00 loops=1)
+              Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+              Index Cond: (t.transaction_id = 1)
+              Index Searches: 1
+              Buffers: shared hit=6
+        ->  Index Scan using users_pkey on public.users u  (cost=0.28..8.30 rows=1 width=48) (actual time=0.001..0.001 rows=1.00 loops=1)
+              Output: u.user_id, u.name, u.email, u.password_hash, u.created_at
+              Index Cond: (u.user_id = t.user_id)
+              Index Searches: 1
+              Buffers: shared hit=3
+  ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=40) (actual time=0.001..0.001 rows=2.00 loops=1)
+        Output: m.merchant_id, m.name, m.category, m.active
+        Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=384
+Planning Time: 0.642 ms
+Execution Time: 0.033 ms

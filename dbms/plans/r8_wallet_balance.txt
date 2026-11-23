@@ -23,3 +23,37 @@ Execution Time: 0.034 ms
 -- 2. Non-negative Balance Guarantee: Retrieves precision numeric(12,2) balance value
 -- 3. Buffer I/O: Fetches exactly 1 index leaf page and 1 table heap page (3 shared hits)
 -- 4. Execution Time: Consistent 0.025 ms latency on M4 NVMe storage
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== R08 run 1 ===
+Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.30 rows=1 width=30) (actual time=0.009..0.009 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, updated_at
+  Index Cond: (wallets.user_id = 1)
+  Index Searches: 1
+  Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=82
+Planning Time: 0.167 ms
+Execution Time: 0.027 ms
+
+=== R08 run 2 ===
+Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.30 rows=1 width=30) (actual time=0.007..0.008 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, updated_at
+  Index Cond: (wallets.user_id = 1)
+  Index Searches: 1
+  Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=82
+Planning Time: 0.152 ms
+Execution Time: 0.024 ms
+
+=== R08 run 3 ===
+Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.30 rows=1 width=30) (actual time=0.008..0.008 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, updated_at
+  Index Cond: (wallets.user_id = 1)
+  Index Searches: 1
+  Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=82
+Planning Time: 0.159 ms
+Execution Time: 0.025 ms

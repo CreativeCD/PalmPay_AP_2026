@@ -46,3 +46,106 @@ Execution Time: 4.912 ms
 -- 2. Left Join Semantics: Guarantees zero-sale active merchants appear with COALESCE 0.00 revenue
 -- 3. Access Strategy: Seq Scan over 25k records + Hash Right Join + HashAggregate + Quicksort
 -- 4. Benchmark Workhorse: 4.330 ms execution time representing the heaviest batch analytics in app
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== R14 run 1 ===
+Sort  (cost=887.84..887.86 rows=10 width=80) (actual time=4.372..4.373 rows=10.00 loops=1)
+  Output: m.merchant_id, m.name, m.category, (count(t.transaction_id)), (COALESCE(sum(t.amount), 0.00))
+  Sort Key: (COALESCE(sum(t.amount), 0.00)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=310
+  ->  HashAggregate  (cost=887.54..887.67 rows=10 width=80) (actual time=4.362..4.364 rows=10.00 loops=1)
+        Output: m.merchant_id, m.name, m.category, count(t.transaction_id), COALESCE(sum(t.amount), 0.00)
+        Group Key: m.merchant_id
+        Batches: 1  Memory Usage: 32kB
+        Buffers: shared hit=307
+        ->  Hash Right Join  (cost=1.23..708.80 rows=23833 width=54) (actual time=0.012..2.764 rows=23833.00 loops=1)
+              Output: m.merchant_id, m.name, m.category, t.transaction_id, t.amount
+              Inner Unique: true
+              Hash Cond: (t.merchant_id = m.merchant_id)
+              Buffers: shared hit=307
+              ->  Seq Scan on public.transactions t  (cost=0.00..618.50 rows=23833 width=22) (actual time=0.002..1.290 rows=23833.00 loops=1)
+                    Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+                    Filter: ((t.status)::text = 'completed'::text)
+                    Rows Removed by Filter: 1167
+                    Buffers: shared hit=306
+              ->  Hash  (cost=1.10..1.10 rows=10 width=40) (actual time=0.005..0.006 rows=10.00 loops=1)
+                    Output: m.merchant_id, m.name, m.category
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=40) (actual time=0.002..0.003 rows=10.00 loops=1)
+                          Output: m.merchant_id, m.name, m.category
+                          Filter: m.active
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=259
+Planning Time: 0.389 ms
+Execution Time: 4.408 ms
+
+=== R14 run 2 ===
+Sort  (cost=887.84..887.86 rows=10 width=80) (actual time=4.257..4.257 rows=10.00 loops=1)
+  Output: m.merchant_id, m.name, m.category, (count(t.transaction_id)), (COALESCE(sum(t.amount), 0.00))
+  Sort Key: (COALESCE(sum(t.amount), 0.00)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=310
+  ->  HashAggregate  (cost=887.54..887.67 rows=10 width=80) (actual time=4.248..4.249 rows=10.00 loops=1)
+        Output: m.merchant_id, m.name, m.category, count(t.transaction_id), COALESCE(sum(t.amount), 0.00)
+        Group Key: m.merchant_id
+        Batches: 1  Memory Usage: 32kB
+        Buffers: shared hit=307
+        ->  Hash Right Join  (cost=1.23..708.80 rows=23833 width=54) (actual time=0.011..2.672 rows=23833.00 loops=1)
+              Output: m.merchant_id, m.name, m.category, t.transaction_id, t.amount
+              Inner Unique: true
+              Hash Cond: (t.merchant_id = m.merchant_id)
+              Buffers: shared hit=307
+              ->  Seq Scan on public.transactions t  (cost=0.00..618.50 rows=23833 width=22) (actual time=0.002..1.225 rows=23833.00 loops=1)
+                    Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+                    Filter: ((t.status)::text = 'completed'::text)
+                    Rows Removed by Filter: 1167
+                    Buffers: shared hit=306
+              ->  Hash  (cost=1.10..1.10 rows=10 width=40) (actual time=0.005..0.005 rows=10.00 loops=1)
+                    Output: m.merchant_id, m.name, m.category
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=40) (actual time=0.002..0.003 rows=10.00 loops=1)
+                          Output: m.merchant_id, m.name, m.category
+                          Filter: m.active
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=259
+Planning Time: 0.395 ms
+Execution Time: 4.290 ms
+
+=== R14 run 3 ===
+Sort  (cost=887.84..887.86 rows=10 width=80) (actual time=4.257..4.258 rows=10.00 loops=1)
+  Output: m.merchant_id, m.name, m.category, (count(t.transaction_id)), (COALESCE(sum(t.amount), 0.00))
+  Sort Key: (COALESCE(sum(t.amount), 0.00)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=310
+  ->  HashAggregate  (cost=887.54..887.67 rows=10 width=80) (actual time=4.245..4.247 rows=10.00 loops=1)
+        Output: m.merchant_id, m.name, m.category, count(t.transaction_id), COALESCE(sum(t.amount), 0.00)
+        Group Key: m.merchant_id
+        Batches: 1  Memory Usage: 32kB
+        Buffers: shared hit=307
+        ->  Hash Right Join  (cost=1.23..708.80 rows=23833 width=54) (actual time=0.015..2.667 rows=23833.00 loops=1)
+              Output: m.merchant_id, m.name, m.category, t.transaction_id, t.amount
+              Inner Unique: true
+              Hash Cond: (t.merchant_id = m.merchant_id)
+              Buffers: shared hit=307
+              ->  Seq Scan on public.transactions t  (cost=0.00..618.50 rows=23833 width=22) (actual time=0.006..1.220 rows=23833.00 loops=1)
+                    Output: t.transaction_id, t.user_id, t.merchant_id, t.amount, t.status, t.reference, t.created_at
+                    Filter: ((t.status)::text = 'completed'::text)
+                    Rows Removed by Filter: 1167
+                    Buffers: shared hit=306
+              ->  Hash  (cost=1.10..1.10 rows=10 width=40) (actual time=0.006..0.006 rows=10.00 loops=1)
+                    Output: m.merchant_id, m.name, m.category
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on public.merchants m  (cost=0.00..1.10 rows=10 width=40) (actual time=0.002..0.003 rows=10.00 loops=1)
+                          Output: m.merchant_id, m.name, m.category
+                          Filter: m.active
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=259
+Planning Time: 0.436 ms
+Execution Time: 4.292 ms

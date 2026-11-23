@@ -26,3 +26,46 @@ Execution Time: 0.039 ms
 -- 2. Race Condition Prevention: Completely prevents concurrent double-spending across parallel requests
 -- 3. Transaction Isolation: Executed inside ACID transaction block released upon COMMIT/ROLLBACK
 -- 4. Low Locking Overhead: Entire lock acquisition completes in 0.065 ms
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== R09 run 1 ===
+LockRows  (cost=0.28..8.31 rows=1 width=28) (actual time=0.048..0.048 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, ctid
+  Buffers: shared hit=8 dirtied=1
+  ->  Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.30 rows=1 width=28) (actual time=0.012..0.012 rows=1.00 loops=1)
+        Output: wallet_id, user_id, balance, ctid
+        Index Cond: (wallets.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=82
+Planning Time: 0.198 ms
+Execution Time: 0.075 ms
+
+=== R09 run 2 ===
+LockRows  (cost=0.28..8.31 rows=1 width=28) (actual time=0.042..0.043 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, ctid
+  Buffers: shared hit=8
+  ->  Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.30 rows=1 width=28) (actual time=0.010..0.010 rows=1.00 loops=1)
+        Output: wallet_id, user_id, balance, ctid
+        Index Cond: (wallets.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=82
+Planning Time: 0.163 ms
+Execution Time: 0.064 ms
+
+=== R09 run 3 ===
+LockRows  (cost=0.28..8.31 rows=1 width=28) (actual time=0.035..0.035 rows=1.00 loops=1)
+  Output: wallet_id, user_id, balance, ctid
+  Buffers: shared hit=8
+  ->  Index Scan using uq_wallets_user_id on public.wallets  (cost=0.28..8.30 rows=1 width=28) (actual time=0.008..0.008 rows=1.00 loops=1)
+        Output: wallet_id, user_id, balance, ctid
+        Index Cond: (wallets.user_id = 1)
+        Index Searches: 1
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=82
+Planning Time: 0.154 ms
+Execution Time: 0.055 ms

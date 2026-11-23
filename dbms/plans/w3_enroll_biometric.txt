@@ -25,3 +25,43 @@ Execution Time: 0.198 ms
 --    - idx_biometric_templates_user_id
 --    - idx_biometric_templates_created_at
 -- 4. Buffer Activity: 8 buffer hits (heap data page + primary key + 2 secondary B-tree indexes)
+
+-- Multi-Run Benchmark Execution Logs (Runs 1 to 3):
+=== W03 run 1 ===
+Insert on public.biometric_templates  (cost=0.00..0.01 rows=1 width=174) (actual time=0.161..0.162 rows=1.00 loops=1)
+  Output: biometric_templates.template_id, biometric_templates.user_id, biometric_templates.method, biometric_templates.created_at
+  Buffers: shared hit=84 dirtied=4
+  ->  Result  (cost=0.00..0.01 rows=1 width=174) (actual time=0.020..0.020 rows=1.00 loops=1)
+        Output: nextval('biometric_templates_template_id_seq'), '1'::bigint, 'vault://palm/templates/nir_v1_user_1_bench.bin'::text, 'NIR_SENSOR_V1'::character varying(50), CURRENT_TIMESTAMP
+        Buffers: shared hit=13 dirtied=1
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.036 ms
+Trigger RI_ConstraintTrigger_c_16964 for constraint fk_biometric_templates_user: time=0.231 calls=1
+Execution Time: 0.404 ms
+
+=== W03 run 2 ===
+Insert on public.biometric_templates  (cost=0.00..0.01 rows=1 width=174) (actual time=0.101..0.101 rows=1.00 loops=1)
+  Output: biometric_templates.template_id, biometric_templates.user_id, biometric_templates.method, biometric_templates.created_at
+  Buffers: shared hit=83
+  ->  Result  (cost=0.00..0.01 rows=1 width=174) (actual time=0.013..0.013 rows=1.00 loops=1)
+        Output: nextval('biometric_templates_template_id_seq'), '1'::bigint, 'vault://palm/templates/nir_v1_user_1_bench.bin'::text, 'NIR_SENSOR_V1'::character varying(50), CURRENT_TIMESTAMP
+        Buffers: shared hit=13
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.031 ms
+Trigger RI_ConstraintTrigger_c_16964 for constraint fk_biometric_templates_user: time=0.191 calls=1
+Execution Time: 0.301 ms
+
+=== W03 run 3 ===
+Insert on public.biometric_templates  (cost=0.00..0.01 rows=1 width=174) (actual time=0.101..0.102 rows=1.00 loops=1)
+  Output: biometric_templates.template_id, biometric_templates.user_id, biometric_templates.method, biometric_templates.created_at
+  Buffers: shared hit=83
+  ->  Result  (cost=0.00..0.01 rows=1 width=174) (actual time=0.014..0.014 rows=1.00 loops=1)
+        Output: nextval('biometric_templates_template_id_seq'), '1'::bigint, 'vault://palm/templates/nir_v1_user_1_bench.bin'::text, 'NIR_SENSOR_V1'::character varying(50), CURRENT_TIMESTAMP
+        Buffers: shared hit=13
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.032 ms
+Trigger RI_ConstraintTrigger_c_16964 for constraint fk_biometric_templates_user: time=0.200 calls=1
+Execution Time: 0.311 ms
